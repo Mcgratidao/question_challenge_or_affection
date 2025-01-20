@@ -109,13 +109,14 @@
 </div>
 
 <script>
+// Função de inicialização, que esconde o primeiro card e exibe o segundo
 function iniciar() {
     // Esconde o primeiro card
     document.querySelector('.card').style.display = 'none';
 
     // Mostra o segundo card
     const card2 = document.querySelector('.card1');
-    card2.style.display = 'block';
+    card2.style.display = 'flex'; // Alterando de 'block' para 'flex' para garantir a centralização correta
 
     // Inicia a animação de sorteio
     let interval = setInterval(() => {
@@ -146,7 +147,7 @@ function iniciar() {
 
 // Funções auxiliares para gerar letras e objetos aleatórios
 function getRandomLetter() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letters = 'ABCDEFGHIJLMNOPQRSTUV';
     return letters[Math.floor(Math.random() * letters.length)];
 }
 
