@@ -7,132 +7,93 @@
     <title>Question Challenge or Affection</title>
     <style>
         body {
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            background-color: #f4f4f4; 
-            font-family: 'Arial', sans-serif;
+            margin: 0; /* Remove margens padrão */
+            display: flex; /* Define o layout como flexbox */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            height: 100vh; /* Garante que o corpo ocupe 100% da altura da janela */
+            background-color: #f4f4f4; /* Fundo geral */
         }
 
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
             width: 40%;
-            height: 250px; 
-            padding: 16px; 
-            border-radius: 8px; 
-            background-color: #f9f9f9; 
-            border: 1px solid #ddd; 
-            text-align: center; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            height: 200px; /* Define uma altura fixa */
+            padding: 16px; /* Espaço interno */
+            border-radius: 8px; /* Cantos arredondados */
+            background-color: #f9f9f9; /* Fundo claro */
+            border: 1px solid #ddd; /* Borda sutil */
+            text-align: center; /* Centraliza o texto dentro do card */
         }
 
         .card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
-
         .card1 {
-            display: none; /* Esconde o card1 desde o início */
-            text-align: center;
+           display: none; /* Esconde o segundo card inicialmente */
+           text-align: center;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
             width: 40%;
-            padding: 16px;
-            border-radius: 8px; 
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .letter {
-            font-size: 3em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .object-list {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-
-        .object-list li {
-            padding: 8px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .object-list li:hover {
-            background-color: #d3d3d3;
-        }
-
-        .timer {
-            margin-top: 20px;
-            font-size: 1.5em;
-            font-weight: bold;
+            height: 200px; /* Define uma altura fixa */
+            padding: 16px; /* Espaço interno */
+            border-radius: 8px; /* Cantos arredondados */
+            background-color: #f9f9f9; /* Fundo claro */
+            border: 1px solid #ddd; /* Borda sutil */
+            text-align: center; /* Centraliza o texto dentro do card */
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-
-<!-- Card inicial -->
+    <!-- Card centralizado -->
 <div class="card">
     <h2>PERGUNTA DESAFIO OU CARINHO</h2>
     <button type="button" class="btn btn-success" onclick="iniciar()">Iniciar</button>
 </div>
 
-<!-- Card com resultado -->
 <div class="card1">
-    <div class="letter" id="letter-result">A</div>
-    <ul class="object-list" id="object-list">
-        <li>Bola</li>
-        <li>Gato</li>
-        <li>Livro</li>
-        <li>Carro</li>
-        <li>Árvore</li>
-    </ul>
-    <p class="timer" id="timer">Tempo restante: 10s</p>
+    <h1>Resultado</h1>
 </div>
-
-<script>
-// Função de inicialização, que esconde o primeiro card e exibe o segundo
+    <script>
 function iniciar() {
     // Esconde o primeiro card
     document.querySelector('.card').style.display = 'none';
 
     // Mostra o segundo card
     const card2 = document.querySelector('.card1');
-    card2.style.display = 'flex'; // Alterando de 'block' para 'flex' para garantir a centralização correta
+    card2.style.display = 'block';
 
     // Inicia a animação de sorteio
     let interval = setInterval(() => {
         const letter = getRandomLetter(); // Função para letra aleatória
         const object = getRandomObject(); // Função para objeto aleatório
-
-        document.getElementById('letter-result').textContent = letter; // Atualiza a letra
-        const objectList = document.getElementById('object-list');
-        // Atualiza a lista de objetos
-        objectList.innerHTML = `<li>${object}</li>`;
+        card2.innerHTML = `<h1>${letter} - ${object}</h1>`;
     }, 100);
+
+    // Configura o cronômetro
+    let time = 10; // Tempo inicial
+    const timerElement = document.createElement('p');
+    timerElement.style.marginTop = '20px';
+    card2.appendChild(timerElement);
+
+    let countdown = setInterval(() => {
+        timerElement.innerText = `Tempo restante: ${time}s`;
+        time--;
+
+        if (time < 0) {
+            clearInterval(countdown); // Para o cronômetro
+            clearInterval(interval); // Para o sorteio
+            timerElement.innerText = 'Tempo esgotado!';
+        }
+    }, 500);
 }
 
 // Funções auxiliares para gerar letras e objetos aleatórios
 function getRandomLetter() {
-    const letters = 'ABCDEFGHIJLMNOPQRSTUV';
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[Math.floor(Math.random() * letters.length)];
 }
 
@@ -140,7 +101,6 @@ function getRandomObject() {
     const objects = ['Bola', 'Gato', 'Livro', 'Carro', 'Árvore'];
     return objects[Math.floor(Math.random() * objects.length)];
 }
-</script>
-
+    </script>
 </body>
 </html>
