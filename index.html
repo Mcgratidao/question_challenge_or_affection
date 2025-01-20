@@ -128,21 +128,6 @@ function iniciar() {
         // Atualiza a lista de objetos
         objectList.innerHTML = `<li>${object}</li>`;
     }, 100);
-
-    // Configura o cronômetro
-    let time = 10; // Tempo inicial
-    const timerElement = document.getElementById('timer');
-    
-    let countdown = setInterval(() => {
-        timerElement.innerText = `Tempo restante: ${time}s`;
-        time--;
-
-        if (time < 0) {
-            clearInterval(countdown); // Para o cronômetro
-            clearInterval(interval); // Para o sorteio
-            timerElement.innerText = 'Tempo esgotado!';
-        }
-    }, 1000);
 }
 
 // Funções auxiliares para gerar letras e objetos aleatórios
