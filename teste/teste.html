@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronômetro Regressivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #timer {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Exibição do cronômetro -->
+    <div id="timer">00:30</div>
+
+    <!-- Botões de controle -->
+    <button onclick="startCountdown()">Iniciar</button>
+    <button onclick="pauseCountdown()">Pausar</button>
+    <button onclick="resetCountdown()">Reiniciar</button>
+
+    <script>
+        let timer; // Variável que armazenará o identificador do setInterval
+        let seconds = 30; // Define o tempo inicial da contagem regressiva (30 segundos)
+        let isRunning = false; // Variável para rastrear se o cronômetro está em execução
+
+        /**
+         * Formata o tempo em MM:SS
+         * @param {number} sec - O tempo em segundos
+         * @returns {string} - O tempo formatado no formato MM:SS
+         */
+        function formatTime(sec) {
+            // Calcula os minutos e segundos
+            const minutes = Math.floor(sec / 60).toString().padStart(2, '0');
+            const seconds = (sec % 60).toString().padStart(2, '0');
+            return `${minutes}:${seconds}`; // Retorna o tempo no formato MM:SS
+        }
+
+        /**
+         * Atualiza o cronômetro na tela com o tempo restante
+         */
+        function updateTimerDisplay() {
+            document.getElementById("timer").textContent = formatTime(seconds);
+        }
+
+        /**
+         * Inicia a contagem regressiva
+         */
+        function startCountdown() {
+            // Apenas inicia o cronômetro se ele não estiver em execução e houver tempo restante
+            if (!isRunning && seconds > 0) {
+                isRunning = true; // Marca o cronômetro como em execução
+                timer = setInterval(() => {
+                    if (seconds > 0) {
+                        seconds--; // Reduz 1 segundo
+                        updateTimerDisplay(); // Atualiza a exibição do tempo
+                    } else {
+                        clearInterval(timer); // Para o cronômetro quando chega a 0
+                        isRunning = false; // Define que não está mais em execução
+                        alert("Tempo esgotado!"); // Exibe alerta
+                    }
+                }, 1000); // Executa a cada 1 segundo
+            }
+        }
+
+        /**
+         * Pausa a contagem regressiva
+         */
+        function pauseCountdown() {
+            clearInterval(timer); // Interrompe o setInterval
+            isRunning = false; // Marca o cronômetro como pausado
+        }
+
+        /**
+         * Reinicia a contagem regressiva para o tempo inicial
+         */
+        function resetCountdown() {
+            clearInterval(timer); // Para qualquer execução em andamento
+            seconds = 30; // Redefine o tempo para 30 segundos
+            isRunning = false; // Define que o cronômetro não está em execução
+            updateTimerDisplay(); // Atualiza a exibição para o tempo inicial
+        }
+
+        // Inicializa o cronômetro com o valor inicial ao carregar a página
+        updateTimerDisplay();
+    </script>
+</body>
+</html>

@@ -5,102 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Question Challenge or Affection</title>
+    <!-- Link do CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            margin: 0; /* Remove margens padrão */
-            display: flex; /* Define o layout como flexbox */
-            justify-content: center; /* Centraliza horizontalmente */
-            align-items: center; /* Centraliza verticalmente */
-            height: 100vh; /* Garante que o corpo ocupe 100% da altura da janela */
-            background-color: #f4f4f4; /* Fundo geral */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+	     background-color: black;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
         }
 
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
             width: 40%;
-            height: 200px; /* Define uma altura fixa */
-            padding: 16px; /* Espaço interno */
-            border-radius: 8px; /* Cantos arredondados */
-            background-color: #f9f9f9; /* Fundo claro */
-            border: 1px solid #ddd; /* Borda sutil */
-            text-align: center; /* Centraliza o texto dentro do card */
+            padding: 16px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
-        .card1 {
-           display: none; /* Esconde o segundo card inicialmente */
-           text-align: center;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
-            width: 40%;
-            height: 200px; /* Define uma altura fixa */
-            padding: 16px; /* Espaço interno */
-            border-radius: 8px; /* Cantos arredondados */
-            background-color: #f9f9f9; /* Fundo claro */
-            border: 1px solid #ddd; /* Borda sutil */
-            text-align: center; /* Centraliza o texto dentro do card */
+
+        .btn-custom {
+            margin-top: 16px;
+            width: 150px; /* Define largura fixa para os botões */
+        }
+
+        #timer {
+            font-size: 2em;
+            margin-top: 50px;
+            color: black;
         }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Card centralizado -->
-<div class="card">
-    <h2>PERGUNTA DESAFIO OU CARINHO</h2>
-    <button type="button" class="btn btn-success" onclick="iniciar()">Iniciar</button>
-</div>
+    <div id="timer">00:30</div>
+    <!-- Card inicial -->
+    <div class="card" id="start-card">
+        <h2>PERGUNTA DESAFIO OU CARINHO</h2>
+        <button type="button" class="btn btn-success btn-custom" onclick="iniciar()">Iniciar</button>
+    </div>
 
-<div class="card1">
-    <h1>Resultado</h1>
-</div>
+    <!-- Card de resultado -->
+    <div class="card hidden" id="result-card">
+        <h1 id="resultado">Resultado</h1>
+    </div>
+
+    <!-- Botões -->
+    <button type="button" class="btn btn-warning btn-custom hidden" onclick="startCountdown()" id="botton1">Iniciar</button>
+    <button type="button" class="btn btn-success btn-custom hidden" onclick="iniciar()" id="botton">Ganhou</button>
+    <button type="button" class="btn btn-danger btn-custom hidden" onclick="reiniciar()" id="botton2">Perdeu</button>
+
     <script>
-function iniciar() {
-    // Esconde o primeiro card
-    document.querySelector('.card').style.display = 'none';
+        function iniciar() {
+            document.getElementById('start-card').classList.add('hidden');
+            const resultCard = document.getElementById('result-card');
+            resultCard.classList.remove('hidden');
 
-    // Mostra o segundo card
-    const card2 = document.querySelector('.card1');
-    card2.style.display = 'block';
+            const resultado = document.getElementById('resultado');
+            let interval = setInterval(() => {
+                const letter = getRandomLetter();
+                const object = getRandomObject();
+                resultado.innerHTML = `${letter} <br><br> ${object}`;
+            }, 100);
 
-    // Inicia a animação de sorteio
-    let interval = setInterval(() => {
-        const letter = getRandomLetter(); // Função para letra aleatória
-        const object = getRandomObject(); // Função para objeto aleatório
-        card2.innerHTML = `<h1>${letter} - ${object}</h1>`;
-    }, 100);
-
-    // Configura o cronômetro
-    let time = 10; // Tempo inicial
-    const timerElement = document.createElement('p');
-    timerElement.style.marginTop = '20px';
-    card2.appendChild(timerElement);
-
-    let countdown = setInterval(() => {
-        timerElement.innerText = `Tempo restante: ${time}s`;
-        time--;
-
-        if (time < 0) {
-            clearInterval(countdown); // Para o cronômetro
-            clearInterval(interval); // Para o sorteio
-            timerElement.innerText = 'Tempo esgotado!';
+            setTimeout(() => {
+                clearInterval(interval);
+                document.getElementById('botton').classList.remove('hidden');
+                document.getElementById('botton1').classList.remove('hidden');
+                document.getElementById('botton2').classList.remove('hidden');
+                document.getElementById('timer').style.color = 'white';
+            }, 4000);
         }
-    }, 500);
-}
 
-// Funções auxiliares para gerar letras e objetos aleatórios
-function getRandomLetter() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    return letters[Math.floor(Math.random() * letters.length)];
-}
+        function reiniciar() {
+            document.getElementById('start-card').classList.add('hidden');
+            document.getElementById('result-card').classList.add('hidden');
+            document.getElementById('botton').classList.add('hidden');
+            document.getElementById('botton1').classList.add('hidden');
+            document.getElementById('botton2').classList.add('hidden');
+            document.getElementById('timer').style.display = 'none';
+            resetCountdown();
+        }
 
-function getRandomObject() {
-    const objects = ['Bola', 'Gato', 'Livro', 'Carro', 'Árvore'];
-    return objects[Math.floor(Math.random() * objects.length)];
-}
+        function getRandomLetter() {
+            const letters = 'ABCDEFGHIJLMNOPQRSTUV';
+            return letters[Math.floor(Math.random() * letters.length)];
+        }
+
+        function getRandomObject() {
+            const objects = ['Nome', 'País', 'Animal', 'Comida', 'Jogo', 'TV', 'Objetos', 'Plantas', 'Brinquedos', 'Esporte'];
+            return objects[Math.floor(Math.random() * objects.length)];
+        }
+
+        let timer;
+        let seconds = 30;
+        let isRunning = false;
+
+        function formatTime(sec) {
+            const minutes = Math.floor(sec / 60).toString().padStart(2, '0');
+            const seconds = (sec % 60).toString().padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById("timer").textContent = formatTime(seconds);
+        }
+
+        function startCountdown() {
+            if (!isRunning && seconds > 0) {
+                isRunning = true;
+                timer = setInterval(() => {
+                    if (seconds > 0) {
+                        seconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timer);
+                        isRunning = false;
+                        alert("Tempo esgotado!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetCountdown() {
+            clearInterval(timer);
+            seconds = 30;
+            isRunning = false;
+            updateTimerDisplay();
+        }
+
+        updateTimerDisplay();
     </script>
 </body>
 </html>
